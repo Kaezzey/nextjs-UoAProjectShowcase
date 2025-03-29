@@ -1,4 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+
 
 :root {
   --background: #ffffff;
@@ -12,12 +14,25 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
+
+.pattern {
+        background-image: linear-gradient(
+                to right,
+                transparent 49.5%,
+                rgba(251, 232, 67, 0.2) 49.5%,
+                rgba(251, 232, 67, 0.6) 50.5%,
+                transparent 50.5%
+        );
+        background-size: 5% 100%;
+        background-position: center;
+        background-repeat: repeat-x;
+    }
 
 body {
   background: var(--background);
@@ -27,4 +42,8 @@ body {
 
 button {
   cursor: pointer;
+}
+
+.search-form {
+  /* Empty class */
 }
