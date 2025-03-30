@@ -1,7 +1,8 @@
 import React from 'react'
 import Form from 'next/form'
-import * as tw from '../tailwind'
+import * as tw from '../app/tailwind'
 import Searchformreset from './Searchformreset'
+import { Search } from 'lucide-react'
 
 const SearchForm = ({query} : {query?: string}) => {
 
@@ -17,7 +18,7 @@ const SearchForm = ({query} : {query?: string}) => {
             {query && <Searchformreset />}
 
             <button type='submit' className={`${tw.search_btn} text-white`}>
-                S
+                <Search className='size-5' />
             </button>
 
         </div>
