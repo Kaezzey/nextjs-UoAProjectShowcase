@@ -21,10 +21,10 @@ export default async function Home({ searchParams }: {
     }
   ];
 
-
   return (
     <>
       <section className={tw.pink_container}>
+        
         <h1 className={tw.heading}>Showcase Your Projects, <br/> Learn From Your Peers!</h1>
 
         <p className={`${tw.sub_heading} !max-w-3xl`}>
