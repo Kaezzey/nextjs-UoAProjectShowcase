@@ -43,3 +43,4 @@ export const startup_form_btn = "bg-[##7415b3] border-[4px] border-black rounded
 export const view_container = "flex justify-end items-center mt-5 fixed bottom-3 right-3";
 export const view_text = "font-medium text-[16px] bg-primary-100 px-4 py-2 rounded-lg capitalize";
 export const category_tag = "font-medium text-[16px] bg-primary-100 px-4 py-2 rounded-full";
+export const card_container = ''

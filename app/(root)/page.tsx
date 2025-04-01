@@ -2,24 +2,18 @@ import Image from "next/image";
 import * as tw from '../tailwind';
 import '../globals.css';
 import SearchForm from "../../components/SearchForm";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCard, { ProjectCardType } from "@/components/ProjectCard";
+import { client } from "@/sanity/lib/client";
+import { PROJECTS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Home({ searchParams }: { 
   searchParams: Promise<{ query?: string }> }) {
     
     const query = (await searchParams).query;
 
-    const posts = [{
-      _createdAt: new Date(),
-      views: 55,
-      author: {_id: 1, name: 'Shinji Ikari'},
-      _id: 1,
-      description: 'This is a description',
-      image: 'https://image.aladin.co.kr/product/50/79/cover500/2102436671_1.jpg',
-      category: 'Robots',
-      title: 'Evangelion',
-    }
-  ];
+    const posts = await client.fetch(PROJECTS_QUERY);
+
+    console.log(JSON.stringify(posts, null, 2));
 
   return (
     <>
@@ -42,8 +36,8 @@ export default async function Home({ searchParams }: {
 
         <ul className={`${tw.card_grid} mt-7`}>
           {posts?.length > 0 ? (
-            posts.map((post: ProjectCardType, index: number) => (
-              <ProjectCard key={post?.id} post={post}/>
+            posts.map((post: ProjectCardType) => (
+              <ProjectCard key={post?._id} post={post}/>
             
             ))
           ) : (
