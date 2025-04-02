@@ -44,3 +44,4 @@ export const view_container = "flex justify-end items-center mt-5 fixed bottom-3
 export const view_text = "font-medium text-[16px] bg-primary-100 px-4 py-2 rounded-lg capitalize";
 export const category_tag = "font-medium text-[16px] bg-primary-100 px-4 py-2 rounded-full";
 export const card_container = ''
+export const card_container_test = 'group-hover:translate-x-[0px] transition-transform'

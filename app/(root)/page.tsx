@@ -3,15 +3,16 @@ import * as tw from '../tailwind';
 import '../globals.css';
 import SearchForm from "../../components/SearchForm";
 import ProjectCard, { ProjectCardType } from "@/components/ProjectCard";
-import { client } from "@/sanity/lib/client";
 import { PROJECTS_QUERY } from "@/sanity/lib/queries";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 
 export default async function Home({ searchParams }: { 
   searchParams: Promise<{ query?: string }> }) {
     
     const query = (await searchParams).query;
+    const params = { search: query || null };
 
-    const posts = await client.fetch(PROJECTS_QUERY);
+    const {data:posts} = await sanityFetch({ query: PROJECTS_QUERY, params })
 
     console.log(JSON.stringify(posts, null, 2));
 
@@ -48,6 +49,8 @@ export default async function Home({ searchParams }: {
         </ul>
 
       </section>
+
+      <SanityLive/>
       
     </>
   );

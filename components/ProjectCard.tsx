@@ -60,7 +60,7 @@ const ProjectCard = ({post} : {post:ProjectCardType}) => {
                     </Button>
 
                 </div>
-            </div>
+        </div>
 
     </li>
   )
