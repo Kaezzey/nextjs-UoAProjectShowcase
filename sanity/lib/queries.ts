@@ -9,10 +9,10 @@ export const PROJECTS_QUERY = defineQuery(`
     }`
 );
 
-export const PROJECT_BY_ID_QUERY = defineQuery(`*[_type == 'project' && _id == _id][0]{
+export const PROJECT_BY_ID_QUERY = defineQuery(`*[_type == 'project' && _id == $id][0]{
   _id, title, slug, _createdAt, author -> {
     _id, name, username, image, bio
   }, description, views,
-    category, image, pitch
+    category, image, tagline, content
 }
 `);
