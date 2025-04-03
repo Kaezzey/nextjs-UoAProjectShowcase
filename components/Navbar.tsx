@@ -12,10 +12,10 @@ const Navbar = async () => {
     <header className='px-5 py-3 bg-white shadow-sm font-work-sans'>
         <nav className='flex items-center justify-between'>
             <Link href="/">
-                <h1 className='font-bold text-3xl text-purple-700'>UOA ENGINEERING</h1>
+                <h1 className='font-bold text-2xl text-purple-700'>UOA ENGINEERING</h1>
             </Link>
 
-            <div className='flex items-center gap-5 text-black text-2xl'>
+            <div className='flex items-center gap-5 text-black text-xl'>
                 {session && session ?.user ? (
                     <>
                         <Link href='/project/create'>

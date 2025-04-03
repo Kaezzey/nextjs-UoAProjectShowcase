@@ -1,13 +1,16 @@
 import { client } from '@/sanity/lib/client';
 import { PROJECT_BY_ID_QUERY } from '@/sanity/lib/queries';
 import { notFound } from 'next/navigation';
-import React from 'react';
+import React, { Suspense } from 'react';
 import * as tw from '@/app/tailwind';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PortableText, PortableTextComponents } from '@portabletext/react';
 import { urlFor } from '@/sanity/lib/image';
+import { Skeleton } from '@/components/ui/skeleton';
+import View from '@/components/View';
+
 
 export const experimental_ppr = true;
 
@@ -97,7 +100,14 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       </section>
 
       <section className={tw.section_container}>
-        <img src={post.image} alt="project thumbnail" className="w-full h-auto rounded-xl" />
+
+        <div className="w-full max-w-4xl mx-auto rounded-xl">
+          <img 
+            src={post.image} 
+            alt="project thumbnail" 
+            className="w-full h-[400px] outline-6 outline-offset-10 object-cover rounded-xl"
+          />
+        </div>
 
         <div className="space-y-5 mt-10 max-w-4xl mx-auto">
           <div className="flex-between gap-5">
@@ -119,21 +129,36 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           </div>
 
-            <div className="max-w-7xl mx-auto rounded-xl outline-6 outline-offset-15 outline-purple">
+            
 
-            <h3 className="text-[30px] font-bold underline mb-10">Project Details</h3>
-            <div className="space-y-6">
-              {post?.content?.length > 0 ? (
-              <PortableText value={post.content} components={components} />
-              ) : (
-              <p className="text-gray-500 italic">No Details Provided</p>
-              )}
+            <div className="bg-purple-50 px-8 py-10 rounded-xl shadow-md border border-purple-200">
+              <h3 className="text-5xl font-extrabold text-left underline decoration-purple-500 underline-offset-4 mb-8">
+                -Project Details-
+              </h3>
+              <div className="space-y-6">
+                {post?.content?.length > 0 ? (
+                  <PortableText value={post.content} components={components} />
+                ) : (
+                  <p className="text-gray-500 italic">No Details Provided</p>
+                )}
+              </div>
             </div>
 
-            </div>
+            
         </div>
-        
+
+        <hr className={tw.divider}/>
+
+        {/* select startups */}
+
+        <Suspense fallback={<Skeleton className='view_skeleton'/>}> 
+          <View id={id}>
+            
+          </View>
+        </Suspense>
+
       </section>
+
     </>
   );
 };
