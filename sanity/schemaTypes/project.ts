@@ -59,20 +59,34 @@ export const project = defineType({
                 type: 'image',
                 fields: [
                   {
-                    type: 'text',
                     name: 'alt',
+                    type: 'text',
                     title: 'Alternative text',
                     description: `Some of your visitors cannot see images, 
                       be they blind, color-blind, low-sighted; 
                       alternative text is of great help for those 
                       people that can rely on it to have a good idea of 
-                      what\'s on your page.`
-                  }
-                ]
-              }
-              
-            ]
-          },
+                      what\'s on your page.`,
+                  },
+                  {
+                    name: 'size',
+                    type: 'string',
+                    title: 'Image Size',
+                    options: {
+                      list: [
+                        { title: 'Small', value: 'small' },
+                        { title: 'Medium', value: 'medium' },
+                        { title: 'Large', value: 'large' },
+                        { title: 'Full Width', value: 'full' },
+                      ],
+                      layout: 'radio', // or 'dropdown'
+                    },
+                  },
+                ],
+              },
+            ],
+          }
+          ,
         
     ],
 

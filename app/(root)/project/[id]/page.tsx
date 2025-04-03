@@ -33,38 +33,60 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         </blockquote>
       ),
     },
+  
     list: {
       bullet: ({ children }) => <ul className="list-disc ml-6 space-y-2">{children}</ul>,
       number: ({ children }) => <ol className="list-decimal ml-6 space-y-2">{children}</ol>,
     },
+  
     listItem: {
       bullet: ({ children }) => <li className="text-gray-700">{children}</li>,
       number: ({ children }) => <li className="text-gray-700">{children}</li>,
     },
+  
     types: {
-      image: ({ value }) => (
-        <img
-          src={urlFor(value.asset).width(800).url()}
-          alt={value.alt || 'Image'}
-          className="rounded-lg shadow my-4 w-full"
-        />
-      ),
+      image: ({ value }) => {
+        if (!value?.asset) return null; // 👈 prevent crash
+  
+        const sizeClass = {
+          small: 'w-1/4',
+          medium: 'w-1/2',
+          large: 'w-3/4',
+          full: 'w-full',
+        }[value.size as 'small' | 'medium' | 'large' | 'full' || 'full'];
+  
+        return (
+          <img
+            src={urlFor(value.asset).width(800).url()}
+            alt={value.alt || 'Image'}
+            className={`rounded-lg shadow my-4 mx-auto ${sizeClass}`}
+          />
+        )
+      },
+  
       code: ({ value }) => (
         <pre className="bg-gray-900 text-white text-sm p-4 rounded overflow-x-auto my-4">
           <code>{value.code}</code>
         </pre>
       ),
     },
+  
     marks: {
       strong: ({ children }) => <strong className="font-bold text-black">{children}</strong>,
       em: ({ children }) => <em className="italic text-gray-600">{children}</em>,
       link: ({ value, children }) => (
-        <a href={value?.href} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+        <a
+          href={value?.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline hover:text-blue-800"
+        >
           {children}
         </a>
       ),
     },
   };
+  
 
   return (
     <>
@@ -97,11 +119,20 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           </div>
 
-          <h3 className="text-[30px] font-bold">Project Details</h3>
-          <div className="space-y-6">
-            <PortableText value={post?.content} components={components} />
-          </div>
+            <div className="max-w-7xl mx-auto rounded-xl outline-6 outline-offset-15 outline-purple">
+
+            <h3 className="text-[30px] font-bold underline mb-10">Project Details</h3>
+            <div className="space-y-6">
+              {post?.content?.length > 0 ? (
+              <PortableText value={post.content} components={components} />
+              ) : (
+              <p className="text-gray-500 italic">No Details Provided</p>
+              )}
+            </div>
+
+            </div>
         </div>
+        
       </section>
     </>
   );

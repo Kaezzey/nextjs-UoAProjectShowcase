@@ -25,12 +25,14 @@ const ProjectCard = ({post} : {post:ProjectCardType}) => {
 
                 <div className={`${tw.flex_between} mt-5 gap-5`}>
                     <div className='flex-1'>
-                        <Link href={`/user/${post.author?._id}`}>
+                        <Link href={`/user/${post.author?._id}`} className='inline-flex'>
                             <p className='font-semibold line-clamp-1'>{post.author?.name}</p>
                         </Link>
 
                         <Link href={`/project/${post._id}`}>
-                            <h3 className={`${tw.text_26_semibold} line-clamp-1`}>{post.title}</h3>
+                            <h3 className={`${tw.text_26_semibold} ${(post.title ?? '').split(' ').length > 5 ? 'line-clamp-2' : 'line-clamp-2 min-h-[77px] flex'}`}>
+                                {post.title}
+                            </h3>
                         </Link>
                     </div>
 
