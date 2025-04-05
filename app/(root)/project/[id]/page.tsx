@@ -6,11 +6,16 @@ import * as tw from '@/app/tailwind';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PortableText, PortableTextComponents } from '@portabletext/react';
 import { urlFor } from '@/sanity/lib/image';
 import { Skeleton } from '@/components/ui/skeleton';
 import View from '@/components/View';
+import markdownit from 'markdown-it';
 
+const md = new markdownit({
+  html: true,      // allow HTML
+  linkify: true,   // auto-detect links
+  breaks: true     // THIS enables line breaks on single \n
+})
 
 export const experimental_ppr = true;
 
@@ -21,74 +26,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (!post) return notFound();
 
-  const components: PortableTextComponents = {
-    block: {
-      h1: ({ children }) => <h1 className="text-4xl font-bold mb-4">{children}</h1>,
-      h2: ({ children }) => <h2 className="text-3xl font-semibold mb-3">{children}</h2>,
-      h3: ({ children }) => <h3 className="text-2xl font-semibold mb-2">{children}</h3>,
-      h4: ({ children }) => <h4 className="text-xl font-medium mb-2">{children}</h4>,
-      h5: ({ children }) => <h5 className="text-lg font-medium mb-1">{children}</h5>,
-      h6: ({ children }) => <h6 className="text-base font-semibold text-gray-600 mb-1 uppercase tracking-wide">{children}</h6>,
-      normal: ({ children }) => <p className="text-base leading-7 text-gray-800 mb-4">{children}</p>,
-      blockquote: ({ children }) => (
-        <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-600 my-4">
-          {children}
-        </blockquote>
-      ),
-    },
-  
-    list: {
-      bullet: ({ children }) => <ul className="list-disc ml-6 space-y-2">{children}</ul>,
-      number: ({ children }) => <ol className="list-decimal ml-6 space-y-2">{children}</ol>,
-    },
-  
-    listItem: {
-      bullet: ({ children }) => <li className="text-gray-700">{children}</li>,
-      number: ({ children }) => <li className="text-gray-700">{children}</li>,
-    },
-  
-    types: {
-      image: ({ value }) => {
-        if (!value?.asset) return null; // 👈 prevent crash
-  
-        const sizeClass = {
-          small: 'w-1/4',
-          medium: 'w-1/2',
-          large: 'w-3/4',
-          full: 'w-full',
-        }[value.size as 'small' | 'medium' | 'large' | 'full' || 'full'];
-  
-        return (
-          <img
-            src={urlFor(value.asset).width(800).url()}
-            alt={value.alt || 'Image'}
-            className={`rounded-lg shadow my-4 mx-auto ${sizeClass}`}
-          />
-        )
-      },
-  
-      code: ({ value }) => (
-        <pre className="bg-gray-900 text-white text-sm p-4 rounded overflow-x-auto my-4">
-          <code>{value.code}</code>
-        </pre>
-      ),
-    },
-  
-    marks: {
-      strong: ({ children }) => <strong className="font-bold text-black">{children}</strong>,
-      em: ({ children }) => <em className="italic text-gray-600">{children}</em>,
-      link: ({ value, children }) => (
-        <a
-          href={value?.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline hover:text-blue-800"
-        >
-          {children}
-        </a>
-      ),
-    },
-  };
+  const parsedContent = md.render(post?.tagline || '')
   
 
   return (
@@ -101,15 +39,15 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <section className={tw.section_container}>
 
-        <div className="w-full max-w-4xl mx-auto rounded-xl">
+        <div className="w-full max-w-5xl mx-auto rounded-xl">
           <img 
-            src={post.image} 
+            src={urlFor(post.image).url()} 
             alt="project thumbnail" 
-            className="w-full h-[400px] outline-6 outline-offset-10 object-cover rounded-xl"
+            className="w-full h-[450px] outline-6 outline-offset-10 object-cover rounded-xl"
           />
         </div>
 
-        <div className="space-y-5 mt-10 max-w-4xl mx-auto">
+        <div className="space-y-5 mt-10 max-w-5xl mx-auto">
           <div className="flex-between gap-5">
             <div className="flex items-center justify-between w-full">
               <Link href={`/user/${post.author?._id}`} className="inline-flex gap-2 items-center mb-3">
@@ -136,10 +74,12 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 -Project Details-
               </h3>
               <div className="space-y-6">
-                {post?.content?.length > 0 ? (
-                  <PortableText value={post.content} components={components} />
-                ) : (
-                  <p className="text-gray-500 italic">No Details Provided</p>
+                {parsedContent ? (
+                  <article className="prose prose-lg max-w-[80ch] w-full prose-img:rounded-lg prose-img:mx-auto prose-img:my-6 prose-img:w-2xl"
+                    dangerouslySetInnerHTML={ {__html: parsedContent} }
+                  />
+                ): (
+                  <p className={tw.no_result}>No Details Provided</p>
                 )}
               </div>
             </div>

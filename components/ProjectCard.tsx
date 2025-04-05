@@ -4,6 +4,7 @@ import { EyeIcon } from 'lucide-react'
 import Link from 'next/link'
 import {Button, buttonVariants} from '../components/ui/button'
 import { Author, Project } from '@/sanity/types'
+import { urlFor } from '@/sanity/lib/client'
 
 export type ProjectCardType = Omit<Project, "author"> & {author?: Author};
 
@@ -46,7 +47,7 @@ const ProjectCard = ({post} : {post:ProjectCardType}) => {
                     <p className={tw.startup_card_desc}>
                         {post.description}
                     </p>
-                    <img src={post.image} alt="type" className={tw.startup_card_img}/>
+                    <img src={urlFor(post.image).url()} alt="type" className={tw.startup_card_img}/>
                 </Link>
 
                 <div className='flex justify-between items-center gap-3 mt-5'>

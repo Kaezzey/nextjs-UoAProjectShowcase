@@ -34,14 +34,29 @@ export const project = defineType({
             type:'text',
         }),
         defineField({
-            name: 'category',
-            type:'string',
-            validation: (Rule) => Rule.min(1).max(20).required().error('Please enter a category'),
+          name: 'category',
+          type: 'string',
+          title: 'Category',
+          options: {
+            list: [
+              { title: 'Technology', value: 'technology' },
+              { title: 'Education', value: 'education' },
+              { title: 'Design', value: 'design' },
+              { title: 'Health', value: 'health' },
+              { title: 'Entertainment', value: 'entertainment' },
+            ],
+            layout: 'dropdown', // optional: you can also use 'radio'
+          },
+          validation: (Rule) => Rule.required().error('Please select a category'),
         }),
         defineField({
-            name: 'image',
-            type:'url',
-            validation: (Rule) => Rule.required(),
+          name: 'image',
+          title: 'Project Thumbnail',
+          type: 'image',
+          options: {
+            hotspot: true, // enables cropping UI
+          },
+          validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: 'tagline',
@@ -85,9 +100,7 @@ export const project = defineType({
                 ],
               },
             ],
-          }
-          ,
-        
+          }, 
     ],
 
 })
