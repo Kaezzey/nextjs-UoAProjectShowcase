@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import dynamic from 'next/dynamic'
 import * as tw from '../app/tailwind'
 import { Input } from '@/components/ui/input'
 import { Textarea } from './ui/textarea'
@@ -12,19 +11,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-
-// Dynamically import ReactQuill for App Router compatibility
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
-import 'react-quill/dist/quill.snow.css'
+import MDEditor from "@uiw/react-md-editor";
+import { Button } from '@/components/ui/button'
+import { Send } from 'lucide-react'
 
 const ProjectForm = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: '',
-    content: '', // 🆕 for the rich text
     imageFile: null as File | null,
   })
+
+  const [tag, setTag] = React.useState('');
+
+  const isPending = false;
+  
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -86,59 +88,112 @@ const ProjectForm = () => {
           <SelectTrigger className={`${tw.startup_form_input} cursor-pointer`}>
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
-          <SelectContent className="z-50 bg-white shadow-xl border rounded-md">
-            <SelectItem value="technology">Technology</SelectItem>
-            <SelectItem value="design">Design</SelectItem>
-            <SelectItem value="education">Education</SelectItem>
-            <SelectItem value="health">Health</SelectItem>
-            <SelectItem value="entertainment">Entertainment</SelectItem>
+          <SelectContent className="z-50 bg-white shadow-xl border rounded-md" >
+            <SelectItem value="technology" className="cursor-pointer">Technology</SelectItem>
+            <SelectItem value="design" className="cursor-pointer">Design</SelectItem>
+            <SelectItem value="education" className="cursor-pointer">Education</SelectItem>
+            <SelectItem value="health" className="cursor-pointer">Health</SelectItem>
+            <SelectItem value="entertainment" className="cursor-pointer">Entertainment</SelectItem>
           </SelectContent>
         </Select>
         {errors.category && (
           <p className={tw.startup_form_error}>{errors.category}</p>
         )}
       </div>
+    {/* Thumbnail Upload */}
+    <div className="mt-6">
+    {/* Top label */}
+    <label htmlFor="image" className={tw.startup_form_label}>
+        Upload Thumbnail
+    </label>
 
-      {/* Image Upload */}
-      <div>
-        <label htmlFor="image" className={tw.startup_form_label}>
-          Upload Thumbnail
+    {/* Hidden file input */}
+    <input
+        type="file"
+        id="image"
+        accept="image/*"
+        onChange={(e) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            setFormData((prev) => ({ ...prev, imageFile: file }))
+        }
+        }}
+        className="hidden"
+    />
+
+    {/* Custom file button */}
+    <div className="mt-2">
+        <label
+        htmlFor="image"
+        className="inline-block cursor-pointer bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition"
+        >
+        Choose Image
         </label>
-        <input
-          type="file"
-          id="image"
-          accept="image/*"
-          onChange={(e) => {
-            const file = e.target.files?.[0]
-            if (file) {
-              setFormData((prev) => ({ ...prev, imageFile: file }))
-            }
-          }}
-          className="block w-full border p-2 rounded text-sm"
-        />
-        {formData.imageFile && (
-          <img
+    </div>
+
+    {/* Image name + preview */}
+    {formData.imageFile && (
+        <div className="mt-3">
+        <p className="text-sm text-gray-600">{formData.imageFile.name}</p>
+        <img
             src={URL.createObjectURL(formData.imageFile)}
             alt="Preview"
-            className="mt-3 max-h-48 rounded"
-          />
-        )}
-      </div>
-
-      {/* Rich Text Editor */}
-      <div className="mt-6">
-        <label className={tw.startup_form_label}>Blog Content</label>
-        <ReactQuill
-          value={formData.content}
-          onChange={(value) =>
-            setFormData((prev) => ({ ...prev, content: value }))
-          }
-          className="bg-white rounded shadow"
+            className="mt-2 max-h-48 rounded border"
         />
-        {errors.content && (
-          <p className={tw.startup_form_error}>{errors.content}</p>
+        </div>
+    )}
+    </div>
+
+    {/* Markdown Editor with Drag-and-Drop Image Upload */}
+        <div
+        data-color-mode="light"
+
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files?.[0];
+            if (!file || !file.type.startsWith("image/")) return;
+
+            const url = URL.createObjectURL(file);
+            const markdownImage = `\n\n![${file.name}](${url})\n\n`;
+
+            setTag((prev) => prev + markdownImage);
+        }}
+        >
+        <label htmlFor="tag" className={tw.startup_form_label}>
+            Blog Content
+        </label>
+
+        <MDEditor
+            value={tag}
+            onChange={(value) => setTag(value as string)}
+            id="tag"
+            preview="live"
+            height={300}
+            style= {{borderRadius: 20, overflow: "hidden"}}
+            textareaProps={{
+                placeholder: "Write your project content here..."
+            }}
+            previewOptions={{
+                disallowedElements: ["style"],
+            }}
+
+        />
+
+        {errors.description && (
+            <p className={tw.startup_form_error}>{errors.description}</p>
         )}
-      </div>
+        </div>
+
+        <Button type='submit' className={`${tw.startup_form_btn} text-white`}
+        disabled={isPending}>
+            {isPending ? 'Submitting...' : 'Submit Your Project'}
+            <Send className='size-6 ml-2'></Send>
+
+        </Button>
+
+
+
     </form>
   )
 }
