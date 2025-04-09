@@ -84,7 +84,7 @@ export type Project = {
   };
   views?: number;
   description?: string;
-  category?: "technology" | "education" | "design" | "health" | "entertainment";
+  category?: "Technology" | "Education" | "Design" | "Health" | "Entertainment";
   image?: {
     asset?: {
       _ref: string;

@@ -39,11 +39,11 @@ export const project = defineType({
           title: 'Category',
           options: {
             list: [
-              { title: 'Technology', value: 'technology' },
-              { title: 'Education', value: 'education' },
-              { title: 'Design', value: 'design' },
-              { title: 'Health', value: 'health' },
-              { title: 'Entertainment', value: 'entertainment' },
+              { title: 'Technology', value: 'Technology' },
+              { title: 'Education', value: 'Education' },
+              { title: 'Design', value: 'Design' },
+              { title: 'Health', value: 'Health' },
+              { title: 'Entertainment', value: 'Entertainment' },
             ],
             layout: 'dropdown', // optional: you can also use 'radio'
           },

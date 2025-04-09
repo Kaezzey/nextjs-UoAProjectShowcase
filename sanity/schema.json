@@ -426,23 +426,23 @@
           "of": [
             {
               "type": "string",
-              "value": "technology"
+              "value": "Technology"
             },
             {
               "type": "string",
-              "value": "education"
+              "value": "Education"
             },
             {
               "type": "string",
-              "value": "design"
+              "value": "Design"
             },
             {
               "type": "string",
-              "value": "health"
+              "value": "Health"
             },
             {
               "type": "string",
-              "value": "entertainment"
+              "value": "Entertainment"
             }
           ]
         },
