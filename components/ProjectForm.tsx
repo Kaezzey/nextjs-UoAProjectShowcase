@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useActionState } from 'react'
 import * as tw from '../app/tailwind'
 import { Input } from '@/components/ui/input'
 import { Textarea } from './ui/textarea'
@@ -14,6 +14,9 @@ import {
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from '@/components/ui/button'
 import { Send } from 'lucide-react'
+import { formSchema } from '@/sanity/lib/validation'
+import { z } from 'zod'
+import { useRouter } from 'next/navigation'
 
 const ProjectForm = () => {
   const [formData, setFormData] = useState({
@@ -24,14 +27,58 @@ const ProjectForm = () => {
   })
 
   const [tag, setTag] = React.useState('');
+  const router = useRouter();
 
-  const isPending = false;
+  const handleFormSubmit = async (prevState: any, _formData: FormData) => {
+    try {
+      const formValues = {
+        title: formData.title,
+        description: formData.description,
+        tagline: tag,
+        category: formData.category,
+        imageFile: formData.imageFile,
+      };
+  
+      // Will throw if validation fails
+      await formSchema.parseAsync(formValues);
+  
+      console.log(formValues); 
+  
+      return {
+        ...prevState,
+        error: '',
+        status: 'SUCCESS',
+      };
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors = error.flatten().fieldErrors;
+        setErrors(fieldErrors as unknown as Record<string, string>);
+        return {
+          ...prevState,
+          error: 'Validation failed',
+          status: 'ERROR',
+        };
+      }
+  
+      return {
+        ...prevState,
+        error: 'An unexpected error occurred',
+        status: 'ERROR',
+      };
+    }
+  };
+
+  const [state, formAction, isPending] = useActionState(handleFormSubmit,{
+    error: "",
+    status: 'INITIAL',
+    });
+
   
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   return (
-    <form action={() => {}} className={`${tw.startup_form} relative`}>
+    <form action={formAction} className={`${tw.startup_form} relative`}>
       {/* Title */}
       <div>
         <label htmlFor="title" className={tw.startup_form_label}>
@@ -188,7 +235,7 @@ const ProjectForm = () => {
         <Button type='submit' className={`${tw.startup_form_btn} text-white`}
         disabled={isPending}>
             {isPending ? 'Submitting...' : 'Submit Your Project'}
-            <Send className='size-6 ml-2'></Send>
+            <Send className='size-6 ml-2'/>
 
         </Button>
 
