@@ -96,7 +96,7 @@ const ProjectForm = () => {
           }
         />
         {errors.title && (
-          <p className={tw.startup_form_error}>{errors.title}</p>
+          <p className="mt-2 text-l text-red-500 text-left">{errors.title}</p>
         )}
       </div>
 
@@ -117,7 +117,7 @@ const ProjectForm = () => {
           }
         />
         {errors.description && (
-          <p className={tw.startup_form_error}>{errors.description}</p>
+          <p className="mt-2 text-l text-red-500 text-left">{errors.description}</p>
         )}
       </div>
 
@@ -127,10 +127,11 @@ const ProjectForm = () => {
           Category
         </label>
         <Select
-          onValueChange={(value) =>
-            setFormData((prev) => ({ ...prev, category: value }))
-          }
-          defaultValue={formData.category}
+        onValueChange={(value) => {
+            setFormData((prev) => ({ ...prev, category: value }));
+            setErrors((prev) => ({ ...prev, category: '' })); // ✅ clear error
+        }}
+        defaultValue={formData.category}
         >
           <SelectTrigger className={`${tw.startup_form_input} cursor-pointer`}>
             <SelectValue placeholder="Select a category" />
@@ -144,7 +145,7 @@ const ProjectForm = () => {
           </SelectContent>
         </Select>
         {errors.category && (
-          <p className={tw.startup_form_error}>{errors.category}</p>
+          <p className="mt-2 text-l text-red-500 text-left">{errors.category}</p>
         )}
       </div>
     {/* Thumbnail Upload */}
@@ -156,16 +157,17 @@ const ProjectForm = () => {
 
     {/* Hidden file input */}
     <input
-        type="file"
-        id="image"
-        accept="image/*"
-        onChange={(e) => {
-        const file = e.target.files?.[0]
+    type="file"
+    id="image"
+    accept="image/*"
+    onChange={(e) => {
+        const file = e.target.files?.[0];
         if (file) {
-            setFormData((prev) => ({ ...prev, imageFile: file }))
+        setFormData((prev) => ({ ...prev, imageFile: file }));
+        setErrors((prev) => ({ ...prev, imageFile: '' })); // ✅ clear error
         }
-        }}
-        className="hidden"
+    }}
+    className="hidden"
     />
 
     {/* Custom file button */}
@@ -190,6 +192,10 @@ const ProjectForm = () => {
         </div>
     )}
     </div>
+
+    {errors.imageFile && (
+  <p className="mt-2 text-l text-red-500 text-left">{errors.imageFile}</p>
+)}
 
     {/* Markdown Editor with Drag-and-Drop Image Upload */}
         <div
@@ -228,7 +234,7 @@ const ProjectForm = () => {
         />
 
         {errors.description && (
-            <p className={tw.startup_form_error}>{errors.description}</p>
+            <p className="mt-2 text-l text-red-500 text-left">{errors.description}</p>
         )}
         </div>
 
