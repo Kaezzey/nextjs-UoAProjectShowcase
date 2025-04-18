@@ -216,16 +216,27 @@ const ProjectForm = () => {
         data-color-mode="light"
 
         onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => {
-            e.preventDefault();
-            const file = e.dataTransfer.files?.[0];
-            if (!file || !file.type.startsWith("image/")) return;
-
-            const url = URL.createObjectURL(file);
-            const markdownImage = `\n\n![${file.name}](${url})\n\n`;
-
-            setTag((prev) => prev + markdownImage);
-        }}
+        onDrop={async (e) => {
+            e.preventDefault()
+            const file = e.dataTransfer.files?.[0]
+            if (!file || !file.type.startsWith('image/')) return
+          
+            const formData = new FormData()
+            formData.append('image', file)
+          
+            try {
+              const res = await fetch('/api/upload', {
+                method: 'POST', 
+                body: formData,
+              })
+          
+              const { url } = await res.json()
+              const markdownImage = `\n\n![${file.name}](${url})\n\n`
+              setTag((prev) => prev + markdownImage)
+            } catch (err) {
+              console.error('Upload error:', err)
+            }
+          }}
         >
         <label htmlFor="tag" className={tw.startup_form_label}>
             Blog Content

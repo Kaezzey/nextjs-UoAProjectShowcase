@@ -38,7 +38,13 @@ const ProjectCard = ({post} : {post:ProjectCardType}) => {
                     </div>
 
                     <Link href={`/user/${post.author?._id}`}>
-                        <img src='https://placehold.co/48x48' alt={post.author?.name} width={48} height={48} className='rounded-full' />
+                    <img
+                        src={post.author?.image || 'https://placehold.co/48x48'}
+                        alt={post.author?.name}
+                        width={48}
+                        height={48}
+                        className='rounded-full object-cover'
+                        />
                     </Link>
 
                 </div>

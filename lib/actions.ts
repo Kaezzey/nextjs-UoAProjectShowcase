@@ -18,13 +18,11 @@ export const createProject = async (_prev: any, form: FormData, tagline: string)
   const slug = slugify(title, { lower: true, strict: true });
 
   try {
-    // ✅ Upload image to Sanity
     const uploadedAsset = await writeClient.assets.upload('image', imageFile, {
       filename: imageFile.name,
       contentType: imageFile.type,
     });
 
-    // ✅ Create project document
     const doc = {
       _type: 'project',
       title,
@@ -48,9 +46,8 @@ export const createProject = async (_prev: any, form: FormData, tagline: string)
       },
     };
 
-    await writeClient.create(doc);
-
-    return { error: '', status: 'SUCCESS' };
+    const created = await writeClient.create(doc);
+return created; 
   } catch (error) {
     console.error(error);
     return { error: JSON.stringify(error), status: 'Error' };
