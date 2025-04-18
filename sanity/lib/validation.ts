@@ -4,7 +4,7 @@ export const formSchema = z.object({
     title: z.string().min(3).max(100),
     description: z.string().min(20).max(200),
     tagline: z.string().min(10),
-    category: z.enum(['technology', 'design', 'education', 'health', 'entertainment'], {
+    category: z.enum(['Technology', 'Design', 'Education', 'Health', 'Entertainment'], {
         errorMap: () => ({ message: 'Please select a category' }),
       }),
       imageFile: z

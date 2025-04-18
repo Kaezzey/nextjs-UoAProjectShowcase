@@ -17,6 +17,7 @@ import { Send } from 'lucide-react'
 import { formSchema } from '@/sanity/lib/validation'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
+import { createProject } from '@/lib/actions'
 
 const ProjectForm = () => {
   const [formData, setFormData] = useState({
@@ -42,13 +43,26 @@ const ProjectForm = () => {
       // Will throw if validation fails
       await formSchema.parseAsync(formValues);
   
-      console.log(formValues); 
-  
-      return {
-        ...prevState,
-        error: '',
-        status: 'SUCCESS',
-      };
+      console.log(formValues);
+
+      const formDataObj = new FormData();
+      formDataObj.append('title', formData.title);
+      formDataObj.append('description', formData.description);
+      formDataObj.append('category', formData.category);
+      if (formData.imageFile) {
+        formDataObj.append('imageFile', formData.imageFile);
+      }
+      const result = await createProject(prevState, formDataObj, tag);
+      
+      if (result && '_id' in result) {
+        router.push(`/project/${result._id}`);
+      } else {
+        console.error('Project creation failed or result does not contain an id.');
+      }
+
+      return result;
+
+
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
@@ -137,11 +151,11 @@ const ProjectForm = () => {
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent className="z-50 bg-white shadow-xl border rounded-md" >
-            <SelectItem value="technology" className="cursor-pointer">Technology</SelectItem>
-            <SelectItem value="design" className="cursor-pointer">Design</SelectItem>
-            <SelectItem value="education" className="cursor-pointer">Education</SelectItem>
-            <SelectItem value="health" className="cursor-pointer">Health</SelectItem>
-            <SelectItem value="entertainment" className="cursor-pointer">Entertainment</SelectItem>
+            <SelectItem value="Technology" className="cursor-pointer">Technology</SelectItem>
+            <SelectItem value="Design" className="cursor-pointer">Design</SelectItem>
+            <SelectItem value="Education" className="cursor-pointer">Education</SelectItem>
+            <SelectItem value="Health" className="cursor-pointer">Health</SelectItem>
+            <SelectItem value="Entertainment" className="cursor-pointer">Entertainment</SelectItem>
           </SelectContent>
         </Select>
         {errors.category && (

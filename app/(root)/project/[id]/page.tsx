@@ -75,7 +75,8 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
               </h3>
               <div className="space-y-6">
                 {parsedContent ? (
-                  <article className="prose prose-lg max-w-[80ch] w-full prose-img:rounded-lg prose-img:mx-auto prose-img:my-6 prose-img:w-2xl"
+                  <article className="prose prose-lg max-w-[80ch] w-full break-words
+             prose-img:rounded-lg prose-img:mx-auto prose-img:my-6 prose-img:w-2xl"
                     dangerouslySetInnerHTML={ {__html: parsedContent} }
                   />
                 ): (

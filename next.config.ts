@@ -3,7 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
 
   images: {
-    domains: ['opus.ing','image.aladin.co.kr', 'www.deviantart.com', 'w0.peakpx.com'],
+    domains: ['opus.ing','image.aladin.co.kr', 'www.deviantart.com',
+      'w0.peakpx.com',
+      'avatars.githubusercontent.com'],
   },
 
 
