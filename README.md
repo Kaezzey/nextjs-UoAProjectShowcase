@@ -18,7 +18,8 @@ A sleek, dynamic platform for showcasing student engineering projects at the Uni
 - **Markdown:** `@uiw/react-md-editor`, `markdown-it`
 - **Image Uploads:** Sanity asset pipeline via API route
 - **Deployment:** [Vercel](https://vercel.com)
-- **Auth:** `auth.js` (if used)
+- **Auth:** `auth.js`
+- **Validation:** [`zod`](https://zod.dev/) — schema validation for form safety
 
 ---
 
