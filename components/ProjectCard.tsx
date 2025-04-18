@@ -1,10 +1,12 @@
-import { formatDate } from '@/lib/utils'
+import { cn, formatDate } from "@/lib/utils";
 import * as tw from '../app/tailwind'
 import { EyeIcon } from 'lucide-react'
 import Link from 'next/link'
 import {Button, buttonVariants} from '../components/ui/button'
 import { Author, Project } from '@/sanity/types'
 import { urlFor } from '@/sanity/lib/client'
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 export type ProjectCardType = Omit<Project, "author"> & {author?: Author};
 
@@ -73,6 +75,18 @@ const ProjectCard = ({post} : {post:ProjectCardType}) => {
 
     </li>
   )
-}
+};
+
+export const ProjectCardSkeleton = () => (
+    <>
+    {[0, 1, 2, 3, 4].map((index: number) => (
+        <li key={cn('skeleton', index)}>
+            <Skeleton className={tw.startup_card_skeleton}>
+
+            </Skeleton>
+        </li>
+    ))}
+    </>
+)
 
 export default ProjectCard

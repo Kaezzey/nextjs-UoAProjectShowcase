@@ -10,6 +10,7 @@ import { urlFor } from '@/sanity/lib/image';
 import { Skeleton } from '@/components/ui/skeleton';
 import View from '@/components/View';
 import markdownit from 'markdown-it';
+import TopProjects from '@/components/TopProjects';
 
 const md = new markdownit({
   html: true,      // allow HTML
@@ -90,7 +91,9 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         <hr className={tw.divider}/>
 
-        {/* select startups */}
+        <Suspense fallback={<Skeleton className='view_skeleton'/>}>
+          <TopProjects />
+        </Suspense>
 
         <Suspense fallback={<Skeleton className='view_skeleton'/>}> 
           <View id={id}>
